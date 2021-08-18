@@ -121,10 +121,7 @@
 	} */
 
 	footer {
-		position: fixed;
-		bottom: 0;
-		left: 0;
-		width: 100%;
+		margin-top: 2rem;
 		padding: 1rem;
 		display: flex;
 		align-items: center;
