@@ -37,7 +37,8 @@
 </head>
 
 <main>
-	<h1>Mars explorer</h1>
+	<h1 class="title">Mars explorer</h1>
+	<p class="subtitle">Pictures captured by the Curiosity Rover on an Earth day of your choice</p>
 
 	{#if photos}
 		{#await photos}
@@ -73,12 +74,21 @@
 	<footer>
 		<a href="https://github.com/dhaiwat10/mars-explorer" target="_blank"
 			><img class="gh-logo" src="gh.png" alt="Github repo" /></a
-		>Made by&nbsp; <a href="https://github.com/dhaiwat10">Dhaiwat</a>
+		>Made by&nbsp; <a href="https://twitter.com/dhaiwat10" target="_blank">Dhaiwat</a>
 	</footer>
 </main>
 
 <style>
 	@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+
+	.title {
+		margin: 0.5rem auto;
+	}
+
+	.subtitle {
+		margin-top: 0;
+		margin-bottom: 2rem;
+	}
 
 	.spinner-container {
 		justify-content: center;
