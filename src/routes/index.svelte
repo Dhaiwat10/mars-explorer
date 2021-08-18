@@ -1,37 +1,116 @@
 <script lang="ts">
 	import { API_KEY, API_URL } from '$lib/vars.js';
+	import { Circle } from 'svelte-loading-spinners';
+	import Photo from '$lib/Photo.svelte';
+	import Carousel from 'svelte-carousel';
 
-	let photo;
+	interface Photo {
+		img_src: string;
+		[key: string]: any;
+	}
 
-	let selectedDate;
+	let photos: Promise<Array<Photo>>;
+
+	let selectedDate = '2021-08-15';
 
 	$: console.log(selectedDate);
 
-	$: console.log(photo);
+	$: console.log(photos);
 
 	$: if (selectedDate) {
-		photo = fetch(`${API_URL}?earth_date=${selectedDate}&api_key=${API_KEY}`)
+		photos = fetch(`${API_URL}?earth_date=${selectedDate}&api_key=${API_KEY}`)
 			.then((r) => r.json())
-			.then((r) => r.photos[0].img_src);
+			.then((r) => {
+				console.log(r.photos);
+				return r.photos;
+			});
 	}
 </script>
 
-<h1>Mars explorer</h1>
+<main>
+	<h1>Mars explorer</h1>
 
-{#if photo}
-	{#await photo then src}
-		<div>
-			<img class="photo" {src} alt="Mars captured on this day" />
-		</div>
-	{/await}
-{/if}
+	{#if photos}
+		{#await photos}
+			<div class="spinner-container">
+				<Circle size={40} />
+			</div>
+		{:then photos}
+			{#if photos.length < 1}
+				<div class="spinner-container">
+					<p>No photos found for this date.</p>
+				</div>
+			{:else}
+				<Carousel dots={false}>
+					{#each photos as photo}
+						<Photo src={photo.img_src} />
+					{/each}
+				</Carousel>
+			{/if}
+		{/await}
+	{/if}
 
-<form>
-	<input type="date" bind:value={selectedDate} max={new Date().toISOString().substring(0, 10)} />
-</form>
+	<form>
+		<label for="date-picker">Select a date</label>
+		<input
+			name="date-picker"
+			class="date-picker"
+			type="date"
+			bind:value={selectedDate}
+			max={new Date().toISOString().substring(0, 10)}
+		/>
+	</form>
+
+	<hr />
+
+	<footer>
+		<a href="https://github.com/dhaiwat10/mars-explorer" target="_blank"
+			><img class="gh-logo" src="gh.png" alt="Github repo" /></a
+		>Made by&nbsp; <a href="https://github.com/dhaiwat10">Dhaiwat</a>
+	</footer>
+</main>
 
 <style>
-	.photo {
-		width: 60%;
+	@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+
+	.spinner-container {
+		justify-content: center;
+		align-items: center;
+		display: flex;
+		margin-bottom: 2rem;
+		height: 60vh;
+	}
+	main {
+		text-align: center;
+		font-family: 'Inter', sans-serif !important;
+	}
+
+	form {
+		display: flex;
+		gap: 1rem;
+		justify-content: center;
+		align-items: center;
+	}
+	.date-picker {
+		padding: 0.5rem;
+		border-radius: 7px;
+		border: 1px solid #ccc;
+		cursor: pointer;
+	}
+
+	hr {
+		margin: 2rem auto;
+		opacity: 0.1;
+	}
+
+	footer {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.gh-logo {
+		height: 2rem;
+		margin-right: 1rem;
 	}
 </style>
