@@ -13,9 +13,9 @@
 
 	let selectedDate = '2021-08-15';
 
-	$: console.log(selectedDate);
+	// $: console.log(selectedDate);
 
-	$: console.log(photos);
+	// $: console.log(photos);
 
 	$: if (selectedDate) {
 		photos = fetch(`${API_URL}?earth_date=${selectedDate}&api_key=${API_KEY}`)
@@ -26,6 +26,15 @@
 			});
 	}
 </script>
+
+<head>
+	<title>Mars Explorer</title>
+	<meta
+		name="description"
+		content="See pictures captured by the Curiosity Rover on an Earth day of your choice"
+	/>
+	<meta name="author" content="Dhaiwat Pandya (@dhaiwat10)" />
+</head>
 
 <main>
 	<h1>Mars explorer</h1>
@@ -60,8 +69,6 @@
 			max={new Date().toISOString().substring(0, 10)}
 		/>
 	</form>
-
-	<hr />
 
 	<footer>
 		<a href="https://github.com/dhaiwat10/mars-explorer" target="_blank"
@@ -98,15 +105,21 @@
 		cursor: pointer;
 	}
 
-	hr {
+	/* hr {
 		margin: 2rem auto;
 		opacity: 0.1;
-	}
+	} */
 
 	footer {
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		padding: 1rem;
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		border-top: 1px solid #ccc;
 	}
 
 	.gh-logo {
